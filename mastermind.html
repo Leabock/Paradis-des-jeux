@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mastermind</title>
+    <link rel="stylesheet" href="jeux.css">
+</head>
+
+<body>
+
+    <main class="page-mastermind">
+
+        <h1>Mastermind</h1>
+
+        <section class="zone-mastermind">
+
+            <p class="consigne">
+                Trouve la combinaison de 4 couleurs.
+            </p>
+
+            <div class="choix-couleurs">
+                <button class="couleur rouge" data-couleur="R"></button>
+                <button class="couleur jaune" data-couleur="J"></button>
+                <button class="couleur bleu" data-couleur="B"></button>
+                <button class="couleur vert" data-couleur="V"></button>
+                <button class="couleur violet" data-couleur="M"></button>
+                <button class="couleur orange" data-couleur="O"></button>
+            </div>
+
+            <p>Ta proposition :</p>
+
+            <div id="proposition" class="proposition"></div>
+
+            <button id="validerMastermind">Valider</button>
+            <button id="effacerMastermind">Effacer</button>
+
+            <div id="resultats"></div>
+
+        </section>
+
+        <a href="jeux.html" class="btn-retour">← Accueil</a>
+
+    </main>
+
+    <script src="mastermind.js"></script>
+</body>
+
+</html>
