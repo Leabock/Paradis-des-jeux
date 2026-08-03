@@ -44,12 +44,12 @@ function jeu(imageId){
 	if(laCase.getAttribute("libre")=="oui"){
 		if(cpt%2==1){
 			coul="J";
-			laCase.src="image/jaune.png";
+			laCase.src="images/jaune.png";
 			texte="joueur 2, à toi de placer ton pion rouge"
 		}
 		else{
 			coul="R";
-			laCase.src="image/rouge.png";
+			laCase.src="images/rouge.png";
 			texte="joueur 1, à toi de placer ton pion jaune"
 		}
 		tab[lig][col]=coul;
