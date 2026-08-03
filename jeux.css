@@ -303,76 +303,128 @@ button:hover {
 }
 
 /*
-     Puissance 4
+    PUISSANCE 4
 */
-#jeu {
-    display: grid;
 
-    /*
-        Petit espace entre les cases.
-    */
-    gap: 4px;
-
-    /*
-        La grille occupe uniquement la largeur
-        nécessaire à ses 7 colonnes.
-    */
-    width: max-content;
-
-    /*
-        Empêche les images de dépasser visuellement.
-    */
-    overflow: hidden;
-}
-
-#jeu img {
-    width: 80px;
-    height: 80px;
-
-    display: block;
-    /*
-        L'image tient entièrement dans sa case
-        sans être déformée.
-    */
-    object-fit: contain;
-}
 /*
-    Conteneur de la grille et du message du joueur.
+    Page du Puissance 4
+*/
+.page-puissance {
+    min-height: 100vh;
+    padding: 40px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/*
+    Zone qui contient la grille
+    et le message du joueur.
 */
 .zone-puissance {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 15px;
 }
-/*
-    Message indiquant le joueur actif.
-*/
-#joueur {
-    min-height: 25px;
 
+/*
+    Grille du Puissance 4.
+
+    On écrit .page-puissance #jeu afin que
+    ce style ne touche pas le jeu Memory.
+*/
+.page-puissance #jeu {
+    display: grid;
+
+    /*
+        Les 7 colonnes font 80 pixels.
+    */
+    grid-template-columns: repeat(7, 80px) !important;
+    grid-auto-rows: 80px;
+
+    gap: 4px;
+
+    /*
+        La largeur s'adapte aux colonnes.
+    */
+    width: max-content;
+    max-width: 100%;
+
+    /*
+        On neutralise les valeurs du Memory.
+    */
+    margin: 30px auto;
+    padding: 10px;
+
+    background-color: #1664a3;
+
+    border: 5px solid #0f4f82;
+    border-radius: 20px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+/*
+    Images générées par le JavaScript.
+
+    Le CSS ne crée aucune image :
+    il fixe seulement leur taille.
+*/
+.page-puissance #jeu > img {
+    width: 80px !important;
+    height: 80px !important;
+
+    max-width: 80px !important;
+    max-height: 80px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block;
+
+    object-fit: contain;
+
+    box-sizing: border-box;
+}
+
+/*
+    Texte indiquant le joueur actif.
+*/
+.page-puissance #joueur {
+    min-height: 25px;
     margin: 0;
 
     text-align: center;
+    font-size: 20px;
     font-weight: bold;
+    color: #1664a3;
 }
+
 /*
-    Adaptation pour les petits écrans.
+    Responsive pour téléphone.
 */
 @media screen and (max-width: 650px) {
 
-    #jeu {
-        grid-template-columns: repeat(7, 12vw) !important;
-
-        gap: 1px;
+    .page-puissance {
+        padding: 20px 5px;
     }
 
-    #jeu img {
-        width: 12vw;
-        height: 12vw;
+    .page-puissance #jeu {
+        grid-template-columns: repeat(7, 12vw) !important;
+        grid-auto-rows: 12vw;
 
-        max-width: 70px;
-        max-height: 70px;
+        gap: 1px;
+        padding: 5px;
+    }
+
+    .page-puissance #jeu > img {
+        width: 12vw !important;
+        height: 12vw !important;
+
+        max-width: 70px !important;
+        max-height: 70px !important;
     }
 }
