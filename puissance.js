@@ -1,148 +1,384 @@
-let grille= document.getElementById("jeu");
-let p=document.getElementById("joueur");
-let tab, uneCase;
-let cpt, texte;
-const NBLIG=6;
-const NBCOL=7;
-grille.style.gridTemplateColumns
-	  ="repeat("+NBCOL+", 80px)";
+"use strict";
+
+/*
+    On récupère les éléments HTML :
+
+    #jeu    = la grille du Puissance 4
+    #joueur = le texte indiquant le joueur actif
+*/
+let grille = document.getElementById("jeu");
+let p = document.getElementById("joueur");
+
+/*
+    Variables utilisées dans le jeu.
+*/
+let tab;
+let uneCase;
+let cpt;
+let texte;
+
+/*
+    Dimensions de la grille :
+    6 lignes et 7 colonnes.
+*/
+const NBLIG = 6;
+const NBCOL = 7;
+
+/*
+    On crée 7 colonnes CSS de 80 pixels.
+*/
+grille.style.gridTemplateColumns = "repeat(" + NBCOL + ", 80px)";
+
+/*
+    On démarre le jeu.
+*/
 init();
-function init(){
-	cpt=1;
-	texte="joueur 1, à toi de placer ton pion jaune"
-	p.innerHTML=texte;
-	tab=[]; //tab pour les pions "", "j" ou "r"
-	for(let lig=0;lig<NBLIG;lig++){
-		tab.push(new Array(NBCOL).fill(""));
-	}
-	for (let lig=0; lig<NBLIG;lig++){
-		for(let col=0; col<NBCOL;col++){
-			uneCase=document.createElement("img");
-			uneCase.src="images/vide.png";
-			uneCase.alt="case vide";
-			uneCase.id="p"+lig+col;
-			//uneCase.dataset.libre="oui";
-			uneCase.setAttribute("libre","oui");
-			grille.appendChild(uneCase);
-		}
-	}
-	grille.addEventListener("click", function(event){
-		console.log("click");
-		if(event.target.tagName=="IMG"){
-			let imageId=event.target.id;
-			jeu(imageId);
-		}
-	});
+
+
+/*
+    Initialise une nouvelle partie.
+*/
+function init()
+{
+    /*
+        Le compteur commence à 1.
+
+        Nombre impair = joueur jaune.
+        Nombre pair   = joueur rouge.
+    */
+    cpt = 1;
+
+    texte = "Joueur 1, à toi de placer ton pion jaune";
+    p.innerHTML = texte;
+
+    /*
+        On vide la grille HTML avant de recréer les cases.
+
+        Cela évite de dupliquer les cases si init()
+        est appelée une deuxième fois.
+    */
+    grille.innerHTML = "";
+
+    /*
+        Tableau JavaScript représentant la grille.
+
+        Une case contient :
+        ""  = vide
+        "J" = pion jaune
+        "R" = pion rouge
+    */
+    tab = [];
+
+    for (let lig = 0; lig < NBLIG; lig++)
+    {
+        tab.push(new Array(NBCOL).fill(""));
+    }
+
+    /*
+        Création des 42 images représentant les cases.
+    */
+    for (let lig = 0; lig < NBLIG; lig++)
+    {
+        for (let col = 0; col < NBCOL; col++)
+        {
+            uneCase = document.createElement("img");
+
+            /*
+                Toutes les images sont dans le dossier "images".
+            */
+            uneCase.src = "images/vide.png";
+            uneCase.alt = "Case vide";
+
+            /*
+                Exemple d'identifiant :
+
+                p00 = ligne 0, colonne 0
+                p45 = ligne 4, colonne 5
+            */
+            uneCase.id = "p" + lig + col;
+
+            /*
+                Attribut personnalisé indiquant
+                que la case peut être jouée.
+            */
+            uneCase.setAttribute("libre", "oui");
+
+            grille.appendChild(uneCase);
+        }
+    }
+
+    /*
+        On écoute les clics effectués dans la grille.
+    */
+    grille.addEventListener("click", clicGrille);
 }
-/////////////////////////////////////////////////////
-function jeu(imageId){
-	console.log(imageId)
-	let lig, col,coul;
-	let laCase= document.getElementById(imageId);
-	lig =imageId[1]; // 2e caractère de la chaine
-	col =imageId[2]; // 3e caractère de la chaine p45
-	if(laCase.getAttribute("libre")=="oui"){
-		if(cpt%2==1){
-			coul="J";
-			laCase.src="images/jaune.png";
-			texte="joueur 2, à toi de placer ton pion rouge"
-		}
-		else{
-			coul="R";
-			laCase.src="images/rouge.png";
-			texte="joueur 1, à toi de placer ton pion jaune"
-		}
-		tab[lig][col]=coul;
-		console.table(tab);
-		p.innerHTML=texte;
-		laCase.setAttribute("libre","non");
-		cpt++;
-		console.log(cpt);
-		let victoire=gagne(laCase, lig, col, coul);
-		if(victoire){
-			alert("bravo 4 alignés");
-			if(coul=="R"){
-				texte="les pions rouges ont gagné"
-			}
-			else{
-				texte="les pions jaunes ont gagné"
-			}	
 
-			p.innerHTML=texte;
-			for (const child of grille.children) {
-				child.setAttribute("libre","non");
-			}
-		}
-		else	
-			if(cpt>42){
-				alert("Match nul");
-			}
-	}
+
+/*
+    Fonction exécutée lorsqu'on clique dans la grille.
+*/
+function clicGrille(event)
+{
+    /*
+        On vérifie que l'élément cliqué est une image.
+    */
+    if (event.target.tagName === "IMG")
+    {
+        let imageId = event.target.id;
+        jeu(imageId);
+    }
 }
-function gagne(laCase,lig,col, coul){
-	let gagne=false;
-	let cptCoul=0;
-	// verif verticale
-	// Nord et sud
-	// sud
-	lig=parseInt(lig); // on les reçoit en chaine
-	// si  + concatène donc trnsformer d'abord en int
-	col=parseInt(col);
-
-	for(let l=lig;l<tab.length && tab[l][col]==coul; l ++){
-		cptCoul++
-	}
-	// nord
-	for(let l=lig-1;l>=0 && tab[l][col]==coul; l --){
-		cptCoul++
-	}
-	//nord+sud
- 	if(cptCoul>=4){
- 		gagne=true;
- 	}
- 	else{
- 		cptCoul=0;
- 		// verification horizontal : est ouest
- 		for(let c=col;c<tab[0].length && tab[lig][c]==coul; c ++){
-			cptCoul++
-		}
-		for(let c=col-1;c>=0 && tab[lig][c]==coul; c --){
-			cptCoul++
-		}
-		if(cptCoul>=4){
- 			gagne=true;
- 		}
- 		else{
- 				cptCoul=0;
-		 		// verification diago principale : haut bas
-		 		for(let c=col, l=lig;c<tab[0].length && l<tab.length && tab[l][c]==coul; c ++, l++){
-					cptCoul++
-				}
-				for(let c=col-1, l=lig-1;c>=0 && l>=0 && tab[l][c]==coul; c --, l--){
-					cptCoul++
-				}
-				if(cptCoul>=4){
-		 			gagne=true;
-		 		}
-		 		else{
-		 				cptCoul=0;
-				 		// verification diago secondaire : haut bas
-				 		for(let c=col, l=lig;c<tab[0].length && l>=0 && tab[l][c]==coul; c ++, l--){
-							cptCoul++
-						}
-						console.log("col",col-1,"lig",(lig+1),cptCoul, tab[col-1][lig+1]);
-						for(let c=col-1, l=lig+1;c>=0 && l<tab.length && tab[l][c]==coul; c --, l++){
-							cptCoul++
-						}
-						console.log(cptCoul);
-						if(cptCoul>=4){
-				 			gagne=true;
-				 		}
-		 		} // else diago princ
- 			}// else o e
-
- 	} //else ns
 
 
-return gagne;
+/*
+    Joue un pion dans la case cliquée.
+*/
+function jeu(imageId)
+{
+    let lig;
+    let col;
+    let coul;
+
+    /*
+        On récupère l'image grâce à son identifiant.
+    */
+    let laCase = document.getElementById(imageId);
+
+    /*
+        Exemple avec p45 :
+
+        imageId[1] = 4 = ligne
+        imageId[2] = 5 = colonne
+    */
+    lig = parseInt(imageId[1]);
+    col = parseInt(imageId[2]);
+
+    /*
+        On ne joue que si la case est encore libre.
+    */
+    if (laCase.getAttribute("libre") === "oui")
+    {
+        /*
+            Si le compteur est impair,
+            c'est le joueur jaune.
+        */
+        if (cpt % 2 === 1)
+        {
+            coul = "J";
+
+            /*
+                Chemin corrigé :
+                le dossier s'appelle "images".
+            */
+            laCase.src = "images/jaune.png";
+
+            texte = "Joueur 2, à toi de placer ton pion rouge";
+        }
+        else
+        {
+            coul = "R";
+
+            /*
+                Chemin corrigé :
+                le dossier s'appelle "images".
+            */
+            laCase.src = "images/rouge.png";
+
+            texte = "Joueur 1, à toi de placer ton pion jaune";
+        }
+
+        /*
+            On enregistre la couleur dans le tableau.
+        */
+        tab[lig][col] = coul;
+
+        /*
+            On actualise le message et on bloque la case.
+        */
+        p.innerHTML = texte;
+        laCase.setAttribute("libre", "non");
+
+        /*
+            On passe au joueur suivant.
+        */
+        cpt++;
+
+        /*
+            Vérification de la victoire.
+        */
+        let victoire = gagne(lig, col, coul);
+
+        if (victoire)
+        {
+            if (coul === "R")
+            {
+                texte = "Les pions rouges ont gagné !";
+            }
+            else
+            {
+                texte = "Les pions jaunes ont gagné !";
+            }
+
+            p.innerHTML = texte;
+
+            /*
+                On bloque toutes les cases après la victoire.
+            */
+            for (const enfant of grille.children)
+            {
+                enfant.setAttribute("libre", "non");
+            }
+
+            alert("Bravo, 4 pions sont alignés !");
+        }
+        else if (cpt > 42)
+        {
+            p.innerHTML = "Match nul !";
+            alert("Match nul");
+        }
+    }
+}
+
+
+/*
+    Vérifie si le dernier pion joué forme
+    un alignement d'au moins 4 pions.
+*/
+function gagne(lig, col, coul)
+{
+    let cptCoul = 0;
+
+    /*
+        Vérification verticale :
+        vers le sud puis vers le nord.
+    */
+    for (
+        let l = lig;
+        l < tab.length && tab[l][col] === coul;
+        l++
+    )
+    {
+        cptCoul++;
+    }
+
+    for (
+        let l = lig - 1;
+        l >= 0 && tab[l][col] === coul;
+        l--
+    )
+    {
+        cptCoul++;
+    }
+
+    if (cptCoul >= 4)
+    {
+        return true;
+    }
+
+
+    /*
+        Vérification horizontale :
+        vers l'est puis vers l'ouest.
+    */
+    cptCoul = 0;
+
+    for (
+        let c = col;
+        c < tab[0].length && tab[lig][c] === coul;
+        c++
+    )
+    {
+        cptCoul++;
+    }
+
+    for (
+        let c = col - 1;
+        c >= 0 && tab[lig][c] === coul;
+        c--
+    )
+    {
+        cptCoul++;
+    }
+
+    if (cptCoul >= 4)
+    {
+        return true;
+    }
+
+
+    /*
+        Vérification de la diagonale principale :
+
+        ↘ vers le bas et la droite
+        ↖ vers le haut et la gauche
+    */
+    cptCoul = 0;
+
+    for (
+        let c = col, l = lig;
+        c < tab[0].length
+        && l < tab.length
+        && tab[l][c] === coul;
+        c++, l++
+    )
+    {
+        cptCoul++;
+    }
+
+    for (
+        let c = col - 1, l = lig - 1;
+        c >= 0
+        && l >= 0
+        && tab[l][c] === coul;
+        c--, l--
+    )
+    {
+        cptCoul++;
+    }
+
+    if (cptCoul >= 4)
+    {
+        return true;
+    }
+
+
+    /*
+        Vérification de la diagonale secondaire :
+
+        ↗ vers le haut et la droite
+        ↙ vers le bas et la gauche
+    */
+    cptCoul = 0;
+
+    for (
+        let c = col, l = lig;
+        c < tab[0].length
+        && l >= 0
+        && tab[l][c] === coul;
+        c++, l--
+    )
+    {
+        cptCoul++;
+    }
+
+    for (
+        let c = col - 1, l = lig + 1;
+        c >= 0
+        && l < tab.length
+        && tab[l][c] === coul;
+        c--, l++
+    )
+    {
+        cptCoul++;
+    }
+
+    if (cptCoul >= 4)
+    {
+        return true;
+    }
+
+    /*
+        Aucun alignement de 4 pions.
+    */
+    return false;
 }
