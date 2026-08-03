@@ -428,3 +428,251 @@ button:hover {
         max-height: 70px !important;
     }
 }
+/*
+    MASTERMIND
+*/
+
+/*
+    Mise en page générale de la page Mastermind.
+*/
+.page-mastermind {
+    min-height: 100vh;
+    padding: 40px;
+    box-sizing: border-box;
+    text-align: center;
+}
+/*
+    Zone principale du jeu.
+*/
+.zone-mastermind {
+    width: 100%;
+    max-width: 700px;
+
+    margin: 30px auto;
+    padding: 35px;
+
+    box-sizing: border-box;
+
+    background-color: white;
+
+    border-radius: 28px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+}
+/*
+    Consigne placée au-dessus des couleurs.
+*/
+.page-mastermind .consigne {
+    margin-top: 0;
+    margin-bottom: 25px;
+
+    color: #1664a3;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+/*
+    Conteneur des six boutons de couleurs.
+*/
+.page-mastermind .choix-couleurs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    margin: 25px 0;
+}
+/*
+    Boutons permettant de choisir une couleur.
+*/
+.page-mastermind .couleur {
+    width: 65px;
+    height: 65px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 4px solid white;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+/*
+    Effet au survol des couleurs.
+*/
+.page-mastermind .couleur:hover {
+    transform: translateY(-5px) scale(1.07);
+
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
+
+    filter: brightness(1.08);
+}
+
+/*
+    Couleurs des boutons et des pions.
+*/
+.page-mastermind .rouge {
+    background: linear-gradient(135deg, #ff5f6d, #d90429);
+}
+.page-mastermind .jaune {
+    background: linear-gradient(135deg, #ffe66d, #f4b400);
+}
+.page-mastermind .bleu {
+    background: linear-gradient(135deg, #4facfe, #0066cc);
+}
+.page-mastermind .vert {
+    background: linear-gradient(135deg, #43e97b, #159947);
+}
+.page-mastermind .violet {
+    background: linear-gradient(135deg, #c471ed, #7b2cbf);
+}
+.page-mastermind .orange {
+    background: linear-gradient(135deg, #ffb347, #f77f00);
+}
+/*
+    Zone montrant la proposition actuelle.
+*/
+.page-mastermind .proposition {
+    min-height: 90px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+
+    margin: 15px auto 25px;
+    padding: 15px;
+
+    background-color: #eef7ff;
+
+    border: 2px dashed #b8d8ef;
+    border-radius: 22px;
+
+    box-sizing: border-box;
+}
+/*
+    Pions créés en JavaScript.
+*/
+.page-mastermind .pion {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    border: 3px solid white;
+    border-radius: 50%;
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+}
+/*
+    Boutons Valider et Effacer.
+*/
+.page-mastermind #validerMastermind {
+    background-color: #38b000;
+}
+.page-mastermind #validerMastermind:hover {
+    background-color: #278500;
+}
+.page-mastermind #effacerMastermind {
+    background-color: #d9534f;
+}
+.page-mastermind #effacerMastermind:hover {
+    background-color: #ac2925;
+}
+/*
+    Zone contenant l'historique des essais.
+*/
+.page-mastermind #resultats {
+    margin-top: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+/*
+    Une ligne correspond à une proposition validée.
+*/
+.page-mastermind .ligne-resultat {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    background-color: #f8fbff;
+
+    border: 1px solid #d9e8f5;
+    border-radius: 18px;
+
+    box-shadow: 0 5px 12px rgba(22, 100, 163, 0.08);
+}
+/*
+    Les pions de l'historique sont légèrement plus petits.
+*/
+.page-mastermind .ligne-resultat .pion {
+    width: 38px;
+    height: 38px;
+}
+/*
+    Texte indiquant les couleurs bien ou mal placées.
+*/
+.page-mastermind .petit-resultat {
+    margin-left: auto;
+
+    color: #1664a3;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+/*
+    Aspect des boutons désactivés après la fin du jeu.
+*/
+.page-mastermind button:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.45;
+
+    transform: none;
+    filter: grayscale(0.5);
+}
+/*
+    Adaptation pour téléphone.
+*/
+@media screen and (max-width: 600px) {
+    .page-mastermind {
+        padding: 20px 10px;
+    }
+    .zone-mastermind {
+        padding: 25px 12px;
+    }
+    .page-mastermind .couleur {
+        width: 50px;
+        height: 50px;
+    }
+    .page-mastermind .pion {
+        width: 45px;
+        height: 45px;
+    }
+    .page-mastermind .ligne-resultat {
+        justify-content: center;
+    }
+    .page-mastermind .petit-resultat {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+
+        text-align: center;
+    }
+}
